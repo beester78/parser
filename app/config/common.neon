@@ -1,0 +1,36 @@
+#
+# WARNING: it is CRITICAL that this file & directory are NOT accessible directly via a web browser!
+# https://nette.org/security-warning
+#
+parameters:
+	parser:
+		urlSource: 'https://foxentry.cz/funkce/'
+	database:
+		dsn: 'mysql:host=127.0.0.1;dbname=ukol'
+		user: root
+		password:
+
+database:
+	dsn: %database.dsn%
+	user: %database.user%
+	password: %database.password%
+	options:
+		lazy: true
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+
+session:
+	expiration: 14 days
+
+services:
+	- App\Model\Parser
+	- App\Model\DatabaseRepository
+	- App\Model\ElasticSearchRepository
+	- App\Presenters\ParserPresenter(%parser%)
+
+	router: App\Router\RouterFactory::createRouter
+
